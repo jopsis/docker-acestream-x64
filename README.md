@@ -1,23 +1,25 @@
 # Docker Acestream x64
 
-Imagen Docker de Acestream Engine para arquitectura x64, basada en Python 3.10 y Debian Bookworm.
+Docker image for Acestream Engine on x64 architecture, based on Python 3.10 and Debian Bookworm.
 
-## Descripción
+[Documentación en Español](README_es.md)
 
-Este contenedor ejecuta Acestream Engine 3.2.11 con configuración optimizada para streaming, incluyendo cache en memoria, límites de conexiones configurables y acceso remoto habilitado.
+## Description
 
-## Características
+This container runs Acestream Engine 3.2.11 with optimized configuration for streaming, including memory cache, configurable connection limits, and remote access enabled.
 
-- **Base**: Python 3.10 en Debian Bookworm
-- **Versión Acestream**: 3.2.11 (Ubuntu 22.04 x86_64)
-- **Cache**: Configurado en memoria (200MB)
-- **Acceso remoto**: Habilitado con tokens de acceso
-- **Buffers optimizados**: 25s para live, 10s para VOD
-- **Arquitectura**: linux/amd64
+## Features
 
-## Uso Rápido
+- **Base**: Python 3.10 on Debian Bookworm
+- **Acestream Version**: 3.2.11 (Ubuntu 22.04 x86_64)
+- **Cache**: Configured in memory (200MB)
+- **Remote access**: Enabled with access tokens
+- **Optimized buffers**: 25s for live, 10s for VOD
+- **Architecture**: linux/amd64
 
-### Desde Docker Hub
+## Quick Start
+
+### From Docker Hub
 
 ```bash
 docker run -d \
@@ -26,57 +28,57 @@ docker run -d \
   jopsis/acestream:x64
 ```
 
-### Construir localmente
+### Build Locally
 
 ```bash
 docker build -t acestream .
 docker run -d -p 6878:6878 acestream
 ```
 
-## Configuración
+## Configuration
 
-### Puertos
+### Ports
 
-- **6878**: Puerto HTTP API de Acestream Engine
+- **6878**: Acestream Engine HTTP API port
 
-### Tokens de Acceso
+### Access Tokens
 
-Los tokens por defecto configurados son:
+Default configured tokens:
 
 - **Access Token**: `acestream`
 - **Service Access Token**: `root`
 
-### Parámetros Configurados
+### Configured Parameters
 
-El motor arranca con los siguientes parámetros:
+The engine starts with the following parameters:
 
-| Parámetro | Valor | Descripción |
+| Parameter | Value | Description |
 |-----------|-------|-------------|
-| `--client-console` | - | Modo consola |
-| `--bind-all` | - | Escucha en todas las interfaces |
-| `--service-remote-access` | - | Habilita acceso remoto |
-| `--access-token` | acestream | Token de acceso público |
-| `--service-access-token` | root | Token de acceso de servicio |
-| `--live-cache-type` | memory | Cache en memoria para streams live |
-| `--live-cache-size` | 209715200 | 200MB de cache live |
-| `--vod-cache-type` | memory | Cache en memoria para VOD |
-| `--cache-dir` | /acestream/.ACEStream | Directorio de cache |
-| `--max-connections` | 500 | Máximo de conexiones |
-| `--max-peers` | 50 | Máximo de peers |
-| `--max-upload-slots` | 50 | Slots de upload |
-| `--live-buffer` | 25 | Buffer live (segundos) |
-| `--vod-buffer` | 10 | Buffer VOD (segundos) |
-| `--log-max-size` | 15000000 | Tamaño máximo de log (15MB) |
+| `--client-console` | - | Console mode |
+| `--bind-all` | - | Listen on all interfaces |
+| `--service-remote-access` | - | Enable remote access |
+| `--access-token` | acestream | Public access token |
+| `--service-access-token` | root | Service access token |
+| `--live-cache-type` | memory | Memory cache for live streams |
+| `--live-cache-size` | 209715200 | 200MB live cache |
+| `--vod-cache-type` | memory | Memory cache for VOD |
+| `--cache-dir` | /acestream/.ACEStream | Cache directory |
+| `--max-connections` | 500 | Maximum connections |
+| `--max-peers` | 50 | Maximum peers |
+| `--max-upload-slots` | 50 | Upload slots |
+| `--live-buffer` | 25 | Live buffer (seconds) |
+| `--vod-buffer` | 10 | VOD buffer (seconds) |
+| `--log-max-size` | 15000000 | Maximum log size (15MB) |
 
-### Personalizar Parámetros
+### Customize Parameters
 
-Puedes sobrescribir los parámetros de inicio usando la variable de entorno `ACESTREAM_ARGS`:
+You can override startup parameters using the `ACESTREAM_ARGS` environment variable:
 
 ```bash
 docker run -d \
   --name acestream \
   -p 6878:6878 \
-  -e ACESTREAM_ARGS="--client-console --bind-all --access-token mitoken" \
+  -e ACESTREAM_ARGS="--client-console --bind-all --access-token mytoken" \
   jopsis/acestream:x64
 ```
 
@@ -96,25 +98,25 @@ services:
       - ACESTREAM_ARGS=--client-console --bind-all --service-remote-access --access-token acestream --service-access-token root --live-cache-type memory --live-cache-size 209715200
 ```
 
-## Uso de la API
+## API Usage
 
-Una vez en ejecución, puedes acceder a la API HTTP de Acestream:
+Once running, you can access the Acestream HTTP API:
 
-### Reproducir un stream
+### Play a stream
 
 ```bash
 curl "http://localhost:6878/ace/getstream?id=CONTENT_ID&format=json"
 ```
 
-### Ejemplo con VLC
+### Example with VLC
 
 ```bash
 vlc http://localhost:6878/ace/getstream?id=CONTENT_ID
 ```
 
-## Volúmenes
+## Volumes
 
-Opcionalmente, puedes montar un volumen para persistir la cache y logs:
+Optionally, you can mount a volume to persist cache and logs:
 
 ```bash
 docker run -d \
@@ -126,40 +128,40 @@ docker run -d \
 
 ## CI/CD
 
-El proyecto incluye un workflow de GitHub Actions que construye y publica automáticamente la imagen en Docker Hub cuando se hace push a las ramas `main` o `master`.
+The project includes a GitHub Actions workflow that automatically builds and publishes the image to Docker Hub when pushing to `main` or `master` branches.
 
-### Configuración del Workflow
+### Workflow Configuration
 
-Se requieren los siguientes secrets en el repositorio de GitHub:
+The following secrets are required in the GitHub repository:
 
-- `DOCKERHUB_USERNAME`: Usuario de Docker Hub
-- `DOCKERHUB_TOKEN`: Token de acceso de Docker Hub
+- `DOCKERHUB_USERNAME`: Docker Hub username
+- `DOCKERHUB_TOKEN`: Docker Hub access token
 
 ## Troubleshooting
 
-### Ver logs del contenedor
+### View container logs
 
 ```bash
 docker logs -f acestream
 ```
 
-### Reiniciar el servicio
+### Restart the service
 
 ```bash
 docker restart acestream
 ```
 
-### Verificar que el servicio está activo
+### Check if service is active
 
 ```bash
 curl http://localhost:6878/webui/api/service?method=get_version
 ```
 
-## Licencia
+## License
 
-Este proyecto es un wrapper de Docker para Acestream Engine. Acestream es propiedad de Acestream Media Ltd.
+This project is a Docker wrapper for Acestream Engine. Acestream is owned by Acestream Media Ltd.
 
-## Recursos
+## Resources
 
 - [Acestream Official](https://acestream.media/)
 - [Docker Hub](https://hub.docker.com/r/jopsis/acestream)
