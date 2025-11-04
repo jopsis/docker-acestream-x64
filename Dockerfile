@@ -22,9 +22,8 @@ RUN if [ -f requirements.txt ]; then pip install --no-cache-dir -r requirements.
 # Crear directorio de cache
 RUN mkdir -p /acestream/.ACEStream
 
-# Exponer puertos de Acestream
-EXPOSE 6878  # API HTTP
-EXPOSE 8621  # P2P BitTorrent
+# Exponer puertos de Acestream (6878: API HTTP, 8621: P2P BitTorrent)
+EXPOSE 6878 8621
 
 # Healthcheck para verificar que el servicio está funcionando
 HEALTHCHECK CMD wget -q -t1 -O- 'http://127.0.0.1:6878/webui/api/service?method=get_version' | grep '"error": null'
