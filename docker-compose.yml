@@ -6,7 +6,8 @@ services:
      - /dev/disk/by-id:noexec,rw,size=4k
      - /tmp/fs:noexec,rw,size=1024m
     ports:
-      - "6878:6878"
+      - "6878:6878"  # API HTTP
+      - "8621:8621"  # P2P BitTorrent
     restart: unless-stopped
     volumes:
       - acestream-data:/acestream/.ACEStream

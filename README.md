@@ -5,6 +5,7 @@ Docker image for Acestream Engine on x64 architecture, based on Python 3.10 and 
 ## Documentation
 
 - **[Advanced Configuration](CONFIGURATION.md)** - Complete guide to parameters and recommended configurations
+- **[Network & P2P Configuration](NETWORK.md)** - Port configuration, UPNP, and network optimization
 - [Documentación en Español](README_es.md)
 
 ## Description
@@ -28,6 +29,7 @@ This container runs Acestream Engine 3.2.11 with optimized configuration for str
 docker run -d \
   --name acestream \
   -p 6878:6878 \
+  -p 8621:8621 \
   jopsis/acestream:x64
 ```
 
@@ -43,6 +45,9 @@ docker run -d -p 6878:6878 acestream
 ### Ports
 
 - **6878**: Acestream Engine HTTP API port
+- **8621**: P2P BitTorrent port (recommended for better performance)
+
+> **Note:** For optimal P2P performance, ensure port 8621 is accessible. See [Network Configuration](NETWORK.md) for details on UPNP and port forwarding.
 
 ### Access Tokens
 
@@ -95,10 +100,16 @@ services:
     image: jopsis/acestream:x64
     container_name: acestream
     ports:
-      - "6878:6878"
+      - "6878:6878"  # API HTTP
+      - "8621:8621"  # P2P BitTorrent
     restart: unless-stopped
     environment:
       - ACESTREAM_ARGS=--client-console --bind-all --service-remote-access --access-token acestream --service-access-token root --live-cache-type memory --live-cache-size 209715200
+    volumes:
+      - acestream-data:/acestream/.ACEStream
+
+volumes:
+  acestream-data:
 ```
 
 ## API Usage
@@ -125,6 +136,7 @@ Optionally, you can mount a volume to persist cache and logs:
 docker run -d \
   --name acestream \
   -p 6878:6878 \
+  -p 8621:8621 \
   -v acestream-data:/acestream/.ACEStream \
   jopsis/acestream:x64
 ```
