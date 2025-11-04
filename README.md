@@ -2,7 +2,10 @@
 
 Docker image for Acestream Engine on x64 architecture, based on Python 3.10 and Debian Bookworm.
 
-[Documentación en Español](README_es.md)
+## Documentation
+
+- **[Advanced Configuration](CONFIGURATION.md)** - Complete guide to parameters and recommended configurations
+- [Documentación en Español](README_es.md)
 
 ## Description
 
