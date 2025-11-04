@@ -4,10 +4,32 @@ Esta guía detalla todos los parámetros disponibles para configurar Acestream E
 
 ## Índice
 
+- [Configuración de Red y Puertos](#configuración-de-red-y-puertos)
 - [Parámetros Disponibles](#parámetros-disponibles)
 - [Configuraciones Recomendadas](#configuraciones-recomendadas)
   - [Dispositivos de Baja Potencia](#dispositivos-de-baja-potencia)
   - [Dispositivos de Alta Potencia](#dispositivos-de-alta-potencia)
+
+---
+
+## Configuración de Red y Puertos
+
+Acestream utiliza dos puertos principales:
+
+- **Puerto 6878 (HTTP API)**: Obligatorio para controlar y reproducir streams
+- **Puerto 8621 (P2P BitTorrent)**: Recomendado para mejorar el rendimiento P2P
+
+⚠️ **Importante**: Para obtener el mejor rendimiento de streaming, es fundamental que el **puerto 8621 esté abierto** y accesible. Esto permite que Acestream reciba conexiones entrantes de otros peers, mejorando significativamente la velocidad y estabilidad del streaming.
+
+📖 **Para más información detallada sobre:**
+- Configuración de puertos y UPNP
+- Network modes en Docker (host vs bridge)
+- Firewall y port forwarding
+- Solución de problemas de conectividad P2P
+
+👉 **Consulta la [Guía Completa de Configuración de Red](REDES.md)**
+
+---
 
 ## Parámetros Disponibles
 
@@ -124,7 +146,8 @@ services:
     image: jopsis/acestream:x64
     container_name: acestream
     ports:
-      - "6878:6878"
+      - "6878:6878"  # API HTTP
+      - "8621:8621"  # P2P BitTorrent
     restart: unless-stopped
     environment:
       - ACESTREAM_ARGS=--client-console --bind-all --service-remote-access --access-token acestream --service-access-token root --live-cache-type memory --live-cache-size 52428800 --vod-cache-type memory --vod-cache-size 52428800 --cache-dir /acestream/.ACEStream --max-connections 100 --max-peers 20 --max-upload-slots 10 --live-buffer 10 --vod-buffer 5 --download-limit 0 --upload-limit 512 --log-max-size 5000000 --log-backup-count 1 --refill-buffer-interval 3 --check-live-pos-interval 15
@@ -152,6 +175,7 @@ volumes:
 docker run -d \
   --name acestream \
   -p 6878:6878 \
+  -p 8621:8621 \
   -m 512m \
   --cpus=1.0 \
   -v acestream-data:/acestream/.ACEStream \
@@ -182,7 +206,8 @@ services:
     image: jopsis/acestream:x64
     container_name: acestream
     ports:
-      - "6878:6878"
+      - "6878:6878"  # API HTTP
+      - "8621:8621"  # P2P BitTorrent
     restart: unless-stopped
     environment:
       - ACESTREAM_ARGS=--client-console --bind-all --service-remote-access --access-token acestream --service-access-token root --live-cache-type memory --live-cache-size 524288000 --vod-cache-type memory --vod-cache-size 524288000 --cache-dir /acestream/.ACEStream --vod-drop-max-age 300 --max-file-size 4294967296 --live-buffer 30 --vod-buffer 15 --max-connections 1000 --max-peers 100 --max-upload-slots 100 --auto-slots 0 --download-limit 0 --upload-limit 0 --stats-report-interval 2 --stats-report-peers --slots-manager-use-cpu-limit 1 --core-skip-have-before-playback-pos 1 --core-dlr-periodic-check-interval 3 --check-live-pos-interval 3 --refill-buffer-interval 1 --webrtc-allow-outgoing-connections 1 --allow-user-config --log-debug 0 --log-max-size 20000000 --log-backup-count 3
@@ -212,6 +237,7 @@ volumes:
 docker run -d \
   --name acestream \
   -p 6878:6878 \
+  -p 8621:8621 \
   -m 2g \
   --cpus=4.0 \
   -v acestream-data:/acestream/.ACEStream \
