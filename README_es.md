@@ -2,6 +2,11 @@
 
 Imagen Docker de Acestream Engine para arquitectura x64, basada en Python 3.10 y Debian Bookworm.
 
+## Documentación
+
+- **[Configuración Avanzada](CONFIGURACION.md)** - Guía completa de parámetros y configuraciones recomendadas
+- [English Documentation](README.md)
+
 ## Descripción
 
 Este contenedor ejecuta Acestream Engine 3.2.11 con configuración optimizada para streaming, incluyendo cache en memoria, límites de conexiones configurables y acceso remoto habilitado.
